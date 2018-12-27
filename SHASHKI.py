@@ -144,10 +144,27 @@ class Window(QWidget):
                 else:
                     return False
 
+        def may_eat_when_up(self):
+            if self.ch_board[self.i + 1][self.j + 1] == '⚫' and self.ch_board[self.i + 2][self.j + 2] is None:
+                return True
+            elif self.ch_board[self.i + 1][self.j - 1] == '⚫' and self.ch_board[self.i + 2][self.j - 2] is None:
+                return True
+
+            if self.ch_board[self.i - 1][self.j - 1] == '⚪' and self.ch_board[self.i - 2][self.j - 2] is None:
+                return True
+            elif self.ch_board[self.i - 1][self.j + 1] == '⚪' and self.ch_board[self.i - 2][self.j + 2] is None:
+                return True
+            else:
+                # print('Nonononoooooo')
+                return False
+
         def eat(self):
             click_determ(self)
-            if self.ch_board[self.i - 1][self.j - 1] == '⚪' and self.ch_board[self.i][self.j] is None:
+            print(self.ch_board[self.i + 1][self.j + 1])
+            if self.ch_board[self.i + 1][self.j + 1] == '⚫' and self.ch_board[self.i][self.j] is None:
                 click_determ(self)
+                print('ok')
+                print(self.i, self.j)
                 self.ch_board[self.i - 1][self.j - 1] = ''
                 self.ch_board[self.i - 1][self.j - 1] = None
 
@@ -160,15 +177,18 @@ class Window(QWidget):
                 self.ch_board[self.i + 2][self.j - 2] = '⚫'
                 self.flag_white = True
             else:
+                print('qwqweqwe')
                 self.i = self.old_i
                 self.j = self.old_j
                 self.flag_black = False
 
         remove_white(self)
-        if may_eat(self) is True:
+        if may_eat_when_up(self) is True:
+            print('MAYEATWHENUP_TRUE')
             eat(self)
         else:
             create_white(self)
+            # print('MAYEATWHENUP_False')
 
         remove_black(self)
         create_black(self)
@@ -212,4 +232,4 @@ if __name__ == '__main__':
     app = QApplication([])
     w = Window()
     w.show()
-    app.exec()
+app.exec()
